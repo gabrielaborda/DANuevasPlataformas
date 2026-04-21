@@ -39,80 +39,96 @@ fun ToDoScreen(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
         // Título
         Text(
-            text = "ToDo App",
-            style = MaterialTheme.typography.titleLarge
+            text = "📝 ToDo App",
+            style = MaterialTheme.typography.headlineMedium
         )
 
-        // Input + botón
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        // Input con estilo
+        Card(
+            shape = MaterialTheme.shapes.medium,
+            elevation = CardDefaults.cardElevation(6.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
 
-            TextField(
-                value = texto,
-                onValueChange = { texto = it },
-                modifier = Modifier.weight(1f),
-                label = { Text("Nueva tarea") }
-            )
+                TextField(
+                    value = texto,
+                    onValueChange = { texto = it },
+                    modifier = Modifier.weight(1f),
+                    label = { Text("Nueva tarea") },
+                    singleLine = true
+                )
 
-            Button(onClick = {
-                if (texto.isNotBlank()) {
-                    if (editIndex != null) {
-                        // Editar
-                        lista = lista.toMutableList().also {
-                            it[editIndex!!] = texto
+                Button(
+                    onClick = {
+                        if (texto.isNotBlank()) {
+                            if (editIndex != null) {
+                                lista = lista.toMutableList().also {
+                                    it[editIndex!!] = texto
+                                }
+                                editIndex = null
+                            } else {
+                                lista = lista + texto
+                            }
+                            texto = ""
                         }
-                        editIndex = null
-                    } else {
-                        // Agregar
-                        lista = lista + texto
-                    }
-                    texto = ""
+                    },
+                    shape = MaterialTheme.shapes.small
+                ) {
+                    Text(if (editIndex != null) "Actualizar" else "Agregar")
                 }
-            }) {
-                Text(if (editIndex != null) "Actualizar" else "Agregar")
             }
         }
 
-        // Lista
+        // Lista estilizada
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             itemsIndexed(lista) { index, tarea ->
 
                 Card(
-                    modifier = Modifier.fillMaxWidth()
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
                 ) {
                     Row(
                         modifier = Modifier
-                            .padding(12.dp),
+                            .fillMaxWidth()
+                            .padding(14.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
 
                         Text(
                             text = tarea,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            style = MaterialTheme.typography.bodyLarge
                         )
 
                         Row {
-                            // Editar
+
                             TextButton(onClick = {
                                 texto = tarea
                                 editIndex = index
                             }) {
-                                Text("Editar")
+                                Text("✏️")
                             }
 
-                            // Eliminar
                             TextButton(onClick = {
                                 lista = lista.toMutableList().also {
                                     it.removeAt(index)
                                 }
                             }) {
-                                Text("Eliminar")
+                                Text("🗑️")
                             }
                         }
                     }
