@@ -11,17 +11,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.musicstoreapp.ui.data.fakeProducts
+import com.example.musicstoreapp.ui.navigation.Routes
+import com.example.musicstoreapp.ui.views.CartViewModel
+import com.example.musicstoreapp.ui.views.DetailViewModel
+import com.example.musicstoreapp.ui.views.HomeViewModel
 
 @Composable
 fun ProductDetailScreen(
     productId: Int,
-    navController: NavController
+    navController: NavController,
+    viewModel: DetailViewModel = viewModel()
 ) {
-
-    // Buscar producto
-    val product = fakeProducts.find { it.id == productId }
+    val products = viewModel.products
+    val product = products.find { it.id == productId }
 
     // Si no existe
     if (product == null) {
@@ -40,6 +45,7 @@ fun ProductDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
+            .padding(WindowInsets.systemBars.asPaddingValues())
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -77,7 +83,8 @@ fun ProductDetailScreen(
         // Botón agregar carrito
         Button(
             onClick = {
-                navController.navigate("cart")
+                viewModel.addProduct(product)
+                navController.navigate(Routes.CART)
             },
             modifier = Modifier.fillMaxWidth()
         ) {

@@ -10,27 +10,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.musicstoreapp.ui.components.AppBottomBar
 import com.example.musicstoreapp.ui.components.AppTopBar
+import com.example.musicstoreapp.ui.components.CartItem
 import com.example.musicstoreapp.ui.data.fakeProducts
 import com.example.musicstoreapp.ui.model.Product
+import com.example.musicstoreapp.ui.views.CartViewModel
 
 @Composable
 fun CartScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: CartViewModel = viewModel()
 ) {
-
-    //  Carrito temporal
-    var cartItems by remember {
-        mutableStateOf(fakeProducts.take(2))
-    }
-
-    //  Total
-    val total = cartItems.sumOf { it.precio }
+    var cartItems =viewModel.cartItems
+    val total = viewModel.total
 
     Scaffold(
-
         topBar = {
             AppTopBar(
                 title = "Carrito",
@@ -40,6 +37,7 @@ fun CartScreen(
 
         bottomBar = {
             AppBottomBar(
+                currentRoute = "cart",
                 onHomeClick = {
                     navController.navigate("home")
                 },
@@ -69,22 +67,15 @@ fun CartScreen(
 
                     CartItem(
                         product = product,
-                        onRemove = {
-                            cartItems = cartItems.filter {
-                                it.id != product.id
-                            }
+                        onRemove = {viewModel.removeProduct(product)
                         }
                     )
                 }
             }
-
-            // 🔹 Total
             Text(
                 text = "Total: $ ${"%.2f".format(total)}",
-                style = MaterialTheme.typography.headlineSmall
             )
 
-            // 🔹 Checkout
             Button(
                 onClick = { },
                 modifier = Modifier.fillMaxWidth()
@@ -95,48 +86,3 @@ fun CartScreen(
     }
 }
 
-@Composable
-fun CartItem(
-    product: Product,
-    onRemove: () -> Unit
-) {
-
-    Card {
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-
-            Image(
-                painter = painterResource(id = product.imagen),
-                contentDescription = product.nombre,
-                modifier = Modifier
-                    .size(80.dp),
-                contentScale = ContentScale.Crop
-            )
-
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-
-                Text(
-                    text = product.nombre,
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                Text(
-                    text = "$ ${product.precio}"
-                )
-            }
-
-            TextButton(
-                onClick = onRemove
-            ) {
-                Text("🗑")
-            }
-        }
-    }
-}

@@ -3,44 +3,39 @@ package com.example.musicstoreapp.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.musicstoreapp.ui.components.AppBottomBar
 import com.example.musicstoreapp.ui.components.AppTopBar
+import com.example.musicstoreapp.ui.data.local.UserStorage
+import com.example.musicstoreapp.ui.navigation.Routes
 
 @Composable
 fun ProfileScreen(
     navController: NavController
 ) {
+    val context = LocalContext.current
+    val user = remember { UserStorage.getSession(context) }
 
     Scaffold(
-
         topBar = {
             AppTopBar(
                 title = "Perfil",
-                onCartClick = {
-                    navController.navigate("cart")
-                }
+                onCartClick = { navController.navigate("cart") }
             )
         },
-
         bottomBar = {
             AppBottomBar(
-
-                onHomeClick = {
-                    navController.navigate("home")
-                },
-
-                onCartClick = {
-                    navController.navigate("cart")
-                },
-
+                currentRoute = "profile",
+                onHomeClick = { navController.navigate("home") },
+                onCartClick = { navController.navigate("cart") },
                 onProfileClick = { }
             )
         }
-
     ) { innerPadding ->
 
         Column(
@@ -52,10 +47,7 @@ fun ProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            //  Avatar simple
-            Card(
-                modifier = Modifier.size(120.dp)
-            ) {
+            Card(modifier = Modifier.size(120.dp)) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -67,21 +59,18 @@ fun ProfileScreen(
                 }
             }
 
-            //  Nombre
             Text(
-                text = "Gabriela Borda",
+                text = user?.nombre ?: "Sin nombre",
                 style = MaterialTheme.typography.headlineSmall
             )
 
-            //  Email
             Text(
-                text = "borda@example.com",
+                text = user?.email ?: "Sin email",
                 style = MaterialTheme.typography.bodyLarge
             )
 
-            Divider()
+            HorizontalDivider()
 
-            //  Opciones
             Button(
                 onClick = { },
                 modifier = Modifier.fillMaxWidth()
@@ -97,10 +86,15 @@ fun ProfileScreen(
             }
 
             OutlinedButton(
-                onClick = { },
+                onClick = {
+                    UserStorage.clearSession(context)
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Configuración")
+                Text("Cerrar sesión")
             }
         }
     }

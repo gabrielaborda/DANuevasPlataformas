@@ -9,4 +9,6 @@ object Routes {
     const val CART = "cart"
 
     const val PROFILE = "profile"
+    const val LOGIN = "login"
+    const val REGISTER = "register"
 }

@@ -6,8 +6,10 @@ import androidx.navigation.compose.*
 import androidx.navigation.navArgument
 import com.example.musicstoreapp.ui.screens.CartScreen
 import com.example.musicstoreapp.ui.screens.HomeScreen
+import com.example.musicstoreapp.ui.screens.LoginScreen
 import com.example.musicstoreapp.ui.screens.ProductDetailScreen
 import com.example.musicstoreapp.ui.screens.ProfileScreen
+import com.example.musicstoreapp.ui.screens.RegisterScreen
 
 @Composable
 fun AppNavigation() {
@@ -16,8 +18,17 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Routes.HOME
+        startDestination = Routes.LOGIN
     ) {
+        // Login
+        composable(Routes.LOGIN) {
+            LoginScreen(navController)
+        }
+
+        // Register
+        composable(Routes.REGISTER) {
+            RegisterScreen(navController)
+        }
 
         //  Home
         composable(Routes.HOME) {
