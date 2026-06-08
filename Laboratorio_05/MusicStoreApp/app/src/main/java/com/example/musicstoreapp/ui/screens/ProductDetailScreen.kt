@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -13,11 +14,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.musicstoreapp.ui.data.fakeProducts
 import com.example.musicstoreapp.ui.navigation.Routes
-import com.example.musicstoreapp.ui.views.CartViewModel
-import com.example.musicstoreapp.ui.views.DetailViewModel
-import com.example.musicstoreapp.ui.views.HomeViewModel
+import com.example.musicstoreapp.ui.viewmodel.DetailViewModel
 
 @Composable
 fun ProductDetailScreen(
@@ -25,10 +23,13 @@ fun ProductDetailScreen(
     navController: NavController,
     viewModel: DetailViewModel = viewModel()
 ) {
-    val products = viewModel.products
-    val product = products.find { it.id == productId }
 
-    // Si no existe
+    LaunchedEffect(productId) {
+        viewModel.loadProduct(productId)
+    }
+
+    val product = viewModel.uiState.product
+
     if (product == null) {
 
         Box(

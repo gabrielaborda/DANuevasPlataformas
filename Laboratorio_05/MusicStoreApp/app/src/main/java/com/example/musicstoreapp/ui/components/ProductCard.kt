@@ -10,7 +10,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
-import com.example.musicstoreapp.ui.model.Product
+import com.example.musicstoreapp.ui.data.model.Product
 
 @Composable
 fun ProductCard(

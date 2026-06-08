@@ -8,18 +8,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.musicstoreapp.ui.components.AppBottomBar
 import com.example.musicstoreapp.ui.components.AppTopBar
 import com.example.musicstoreapp.ui.data.local.UserStorage
 import com.example.musicstoreapp.ui.navigation.Routes
+import com.example.musicstoreapp.ui.viewmodel.ProfileViewModel
 
 @Composable
 fun ProfileScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
-    val user = remember { UserStorage.getSession(context) }
+    val viewModel: ProfileViewModel = viewModel()
 
     Scaffold(
         topBar = {
@@ -60,12 +62,15 @@ fun ProfileScreen(
             }
 
             Text(
-                text = user?.nombre ?: "Sin nombre",
+                text = viewModel.uiState.nombre,
                 style = MaterialTheme.typography.headlineSmall
             )
 
             Text(
-                text = user?.email ?: "Sin email",
+                text = if (viewModel.uiState.email.isNotBlank())
+                    viewModel.uiState.email
+                else
+                    "Sin email",
                 style = MaterialTheme.typography.bodyLarge
             )
 

@@ -12,7 +12,7 @@ import com.example.musicstoreapp.ui.components.ProductList
 import com.example.musicstoreapp.ui.components.SearchBar
 import com.example.musicstoreapp.ui.navigation.Routes
 import com.example.musicstoreapp.ui.data.repository.ProductRepository
-import com.example.musicstoreapp.ui.views.HomeViewModel
+import com.example.musicstoreapp.ui.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(
@@ -37,11 +37,11 @@ fun HomeScreen(
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             SearchBar(
-                query = viewModel.searchText,
-                onQueryChange = { viewModel.searchText = it }
+                query = viewModel.uiState.searchText,
+                onQueryChange = {viewModel.updateSearch(it) }
             )
             ProductList(
-                products = viewModel.products,
+                products = viewModel.uiState.products,
                 onProductClick = {
                     product -> navController.navigate(
                     "detail/${product.id}")

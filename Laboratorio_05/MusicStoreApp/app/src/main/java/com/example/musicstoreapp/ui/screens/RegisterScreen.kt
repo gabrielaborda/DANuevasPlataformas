@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.musicstoreapp.ui.navigation.Routes
-import com.example.musicstoreapp.ui.views.AuthViewModel
+import com.example.musicstoreapp.ui.viewmodel.AuthViewModel
 @Composable
 fun RegisterScreen(
     navController: NavController,
@@ -57,8 +57,8 @@ fun RegisterScreen(
 
         // Campos
         OutlinedTextField(
-            value = viewModel.registerNombre,
-            onValueChange = { viewModel.registerNombre = it },
+            value = viewModel.uiState.registerNombre,
+            onValueChange = { viewModel.updateRegisterNombre(it)  },
             label = { Text("Nombre") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
@@ -67,8 +67,8 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         OutlinedTextField(
-            value = viewModel.registerEmail,
-            onValueChange = { viewModel.registerEmail = it },
+            value = viewModel.uiState.registerEmail,
+            onValueChange = { viewModel.updateRegisterEmail(it) },
             label = { Text("Email") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
@@ -78,8 +78,8 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         OutlinedTextField(
-            value = viewModel.registerPassword,
-            onValueChange = { viewModel.registerPassword = it },
+            value = viewModel.uiState.registerPassword,
+            onValueChange = {viewModel.updateRegisterPassword(it) },
             label = { Text("Contraseña") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
@@ -88,7 +88,7 @@ fun RegisterScreen(
         )
 
         // Error
-        viewModel.registerError?.let {
+        viewModel.uiState.registerError?.let {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = it,
@@ -109,9 +109,9 @@ fun RegisterScreen(
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = !viewModel.isLoading
+            enabled = !viewModel.uiState.isLoading
         ) {
-            if (viewModel.isLoading) {
+            if (viewModel.uiState.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(20.dp),
                     color = MaterialTheme.colorScheme.onPrimary,

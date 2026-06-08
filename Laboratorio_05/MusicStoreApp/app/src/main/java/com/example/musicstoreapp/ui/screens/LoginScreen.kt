@@ -1,6 +1,5 @@
 package com.example.musicstoreapp.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -26,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.musicstoreapp.ui.navigation.Routes
-import com.example.musicstoreapp.ui.views.AuthViewModel
+import com.example.musicstoreapp.ui.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
@@ -63,8 +61,8 @@ fun LoginScreen(
 
             // Campos
             OutlinedTextField(
-                value = viewModel.loginEmail,
-                onValueChange = { viewModel.loginEmail = it },
+                value = viewModel.uiState.loginEmail,
+                onValueChange = { viewModel.updateLoginEmail(it) },
                 label = { Text("Email") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -74,8 +72,8 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = viewModel.loginPassword,
-                onValueChange = { viewModel.loginPassword = it },
+                value = viewModel.uiState.loginPassword,
+                onValueChange = { viewModel.updateLoginPassword(it) },
                 label = { Text("Contraseña") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -84,7 +82,7 @@ fun LoginScreen(
             )
 
             // Error
-            viewModel.loginError?.let {
+            viewModel.uiState.loginError?.let {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = it,
@@ -105,9 +103,9 @@ fun LoginScreen(
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = !viewModel.isLoading
+                enabled = !viewModel.uiState.isLoading
             ) {
-                if (viewModel.isLoading) {
+                if (viewModel.uiState.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(20.dp),
                         color = MaterialTheme.colorScheme.onPrimary,

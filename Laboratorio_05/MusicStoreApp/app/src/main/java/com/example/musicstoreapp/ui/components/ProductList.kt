@@ -6,7 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import com.example.musicstoreapp.ui.model.Product
+import com.example.musicstoreapp.ui.data.model.Product
 
 @Composable
 fun ProductList(

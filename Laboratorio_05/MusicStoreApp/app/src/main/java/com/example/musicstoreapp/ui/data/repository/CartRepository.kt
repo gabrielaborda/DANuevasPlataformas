@@ -1,7 +1,7 @@
 package com.example.musicstoreapp.ui.data.repository
 
 import androidx.compose.runtime.mutableStateListOf
-import com.example.musicstoreapp.ui.model.Product
+import com.example.musicstoreapp.ui.data.model.Product
 
 object CartRepository {
     private val _items = mutableStateListOf<Product>()

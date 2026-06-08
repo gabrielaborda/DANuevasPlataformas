@@ -1,4 +1,4 @@
-package com.example.musicstoreapp.ui.model
+package com.example.musicstoreapp.ui.data.model
 
 data class Product(
     val id: Int,
