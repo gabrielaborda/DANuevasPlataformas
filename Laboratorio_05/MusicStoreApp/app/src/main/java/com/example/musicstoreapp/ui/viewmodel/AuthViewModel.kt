@@ -1,22 +1,20 @@
 package com.example.musicstoreapp.ui.viewmodel
 
-import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.musicstoreapp.ui.data.local.SessionManager
 import com.example.musicstoreapp.ui.data.local.UserEntity
-import com.example.musicstoreapp.ui.data.local.UserStorage
 import com.example.musicstoreapp.ui.data.repository.UserRepository
 import com.example.musicstoreapp.ui.state.AuthUiState
 import kotlinx.coroutines.launch
 
 class AuthViewModel(
-    application: Application
-) : AndroidViewModel(application) {
-
-    private val repository = UserRepository(application.applicationContext)
+    private val repository: UserRepository,
+    private val sessionManager: SessionManager
+) : ViewModel() {
 
     var uiState by mutableStateOf(AuthUiState())
         private set
@@ -57,10 +55,7 @@ class AuthViewModel(
 
             if (user != null) {
 
-                UserStorage.saveSession(
-                    getApplication(),
-                    user
-                )
+                sessionManager.saveSession(user)
 
                 onSuccess(user)
 

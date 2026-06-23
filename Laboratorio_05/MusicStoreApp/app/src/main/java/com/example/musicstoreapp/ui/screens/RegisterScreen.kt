@@ -1,4 +1,5 @@
 package com.example.musicstoreapp.ui.screens
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,12 +24,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.musicstoreapp.ui.AppViewModelProvider
 import com.example.musicstoreapp.ui.navigation.Routes
 import com.example.musicstoreapp.ui.viewmodel.AuthViewModel
+
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    viewModel: AuthViewModel = viewModel()
+    viewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Column(
         modifier = Modifier

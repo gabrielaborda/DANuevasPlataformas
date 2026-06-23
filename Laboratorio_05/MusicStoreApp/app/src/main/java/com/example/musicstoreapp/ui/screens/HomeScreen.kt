@@ -6,19 +6,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.musicstoreapp.ui.AppViewModelProvider
 import com.example.musicstoreapp.ui.components.AppBottomBar
 import com.example.musicstoreapp.ui.components.AppTopBar
 import com.example.musicstoreapp.ui.components.ProductList
 import com.example.musicstoreapp.ui.components.SearchBar
 import com.example.musicstoreapp.ui.navigation.Routes
-import com.example.musicstoreapp.ui.data.repository.ProductRepository
 import com.example.musicstoreapp.ui.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: HomeViewModel = HomeViewModel(
-        ProductRepository ())
+    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Scaffold(
         topBar = {

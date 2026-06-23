@@ -3,26 +3,22 @@ package com.example.musicstoreapp.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.musicstoreapp.ui.AppViewModelProvider
 import com.example.musicstoreapp.ui.components.AppBottomBar
 import com.example.musicstoreapp.ui.components.AppTopBar
-import com.example.musicstoreapp.ui.data.local.UserStorage
 import com.example.musicstoreapp.ui.navigation.Routes
 import com.example.musicstoreapp.ui.viewmodel.ProfileViewModel
 
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val context = LocalContext.current
-    val viewModel: ProfileViewModel = viewModel()
-
     Scaffold(
         topBar = {
             AppTopBar(
@@ -92,7 +88,7 @@ fun ProfileScreen(
 
             OutlinedButton(
                 onClick = {
-                    UserStorage.clearSession(context)
+                    viewModel.logout()
                     navController.navigate(Routes.LOGIN) {
                         popUpTo(0) { inclusive = true }
                     }

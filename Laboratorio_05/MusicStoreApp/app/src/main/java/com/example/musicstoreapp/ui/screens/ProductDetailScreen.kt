@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.musicstoreapp.ui.AppViewModelProvider
 import com.example.musicstoreapp.ui.navigation.Routes
 import com.example.musicstoreapp.ui.viewmodel.DetailViewModel
 
@@ -21,7 +22,7 @@ import com.example.musicstoreapp.ui.viewmodel.DetailViewModel
 fun ProductDetailScreen(
     productId: Int,
     navController: NavController,
-    viewModel: DetailViewModel = viewModel()
+    viewModel: DetailViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
 
     LaunchedEffect(productId) {

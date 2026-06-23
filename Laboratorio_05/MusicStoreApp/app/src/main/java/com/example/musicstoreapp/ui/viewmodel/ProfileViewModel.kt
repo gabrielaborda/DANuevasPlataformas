@@ -1,16 +1,15 @@
 package com.example.musicstoreapp.ui.viewmodel
 
-import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
-import com.example.musicstoreapp.ui.data.local.UserStorage
+import androidx.lifecycle.ViewModel
+import com.example.musicstoreapp.ui.data.local.SessionManager
 import com.example.musicstoreapp.ui.state.ProfileUiState
 
 class ProfileViewModel(
-    application: Application
-) : AndroidViewModel(application) {
+    private val sessionManager: SessionManager
+) : ViewModel() {
 
     var uiState by mutableStateOf(ProfileUiState())
         private set
@@ -21,7 +20,7 @@ class ProfileViewModel(
 
     private fun loadUser() {
 
-        val user = UserStorage.getSession(getApplication())
+        val user = sessionManager.getSession()
 
         if (user != null) {
 
@@ -35,7 +34,7 @@ class ProfileViewModel(
 
     fun logout() {
 
-        UserStorage.clearSession(getApplication())
+        sessionManager.clearSession()
 
         uiState = ProfileUiState()
     }
