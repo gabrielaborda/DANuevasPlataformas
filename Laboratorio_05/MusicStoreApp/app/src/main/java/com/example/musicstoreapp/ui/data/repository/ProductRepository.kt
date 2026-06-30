@@ -1,10 +1,12 @@
 package com.example.musicstoreapp.ui.data.repository
 
-import com.example.musicstoreapp.ui.data.fakeProducts
 import com.example.musicstoreapp.ui.data.model.Product
+import com.example.musicstoreapp.ui.data.remote.ApiClient
 
 class ProductRepository {
-    fun getProducts(): List<Product> {
-        return fakeProducts;
+
+    suspend fun getProducts(): List<Product> {
+        return ApiClient.api.getProducts()
     }
+
 }

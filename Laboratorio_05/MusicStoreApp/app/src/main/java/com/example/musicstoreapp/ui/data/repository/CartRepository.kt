@@ -16,6 +16,6 @@ object CartRepository {
     }
 
     fun getTotal(): Double{
-        return _items.sumOf { it.precio }
+        return _items.sumOf { it.price }
     }
 }

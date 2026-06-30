@@ -12,6 +12,6 @@ class ProductVisitLoggerImpl(private val sessionManager: SessionManager) : Produ
     override fun logVisit(product: Product) {
         val user = sessionManager.getSession()
         val userName = user?.nombre ?: "Invitado"
-        Log.d("ProductVisitLogger", "Usuario: $userName visitó el producto: ${product.nombre} (ID: ${product.id})")
+        Log.d("ProductVisitLogger", "Usuario: $userName visitó el producto: ${product.title} (ID: ${product.id})")
     }
 }

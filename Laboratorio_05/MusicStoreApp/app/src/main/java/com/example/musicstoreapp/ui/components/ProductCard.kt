@@ -10,6 +10,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
+import coil.compose.AsyncImage
 import com.example.musicstoreapp.ui.data.model.Product
 
 @Composable
@@ -27,13 +28,13 @@ fun ProductCard(
             modifier = Modifier.padding(12.dp)
         ) {
             // Imagen
-            Image(
-                painter = painterResource(id = product.imagen),
-                contentDescription = product.nombre,
+            AsyncImage(
+                model = product.image, // ¡Listo! Aquí Coil recibe la URL (String) directamente
+                contentDescription = product.title,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
-                    .clip(RoundedCornerShape(12.dp)),
+                    .height(300.dp)
+                    .clip(MaterialTheme.shapes.large),
                 contentScale = ContentScale.Crop
             )
 
@@ -41,7 +42,7 @@ fun ProductCard(
 
             // Nombre
             Text(
-                text = product.nombre,
+                text = product.title,
                 style = MaterialTheme.typography.titleMedium
             )
 
@@ -49,7 +50,7 @@ fun ProductCard(
 
             // Precio
             Text(
-                text = "$ ${product.precio}",
+                text = "$ ${product.price}",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.primary
             )

@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.musicstoreapp.ui.AppViewModelProvider
 import com.example.musicstoreapp.ui.navigation.Routes
 import com.example.musicstoreapp.ui.viewmodel.DetailViewModel
@@ -53,9 +54,9 @@ fun ProductDetailScreen(
     ) {
 
         // Imagen
-        Image(
-            painter = painterResource(id = product.imagen),
-            contentDescription = product.nombre,
+        AsyncImage(
+            model = product.image, // ¡Listo! Aquí Coil recibe la URL (String) directamente
+            contentDescription = product.title,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
@@ -65,20 +66,20 @@ fun ProductDetailScreen(
 
         // Nombre
         Text(
-            text = product.nombre,
+            text = product.title,
             style = MaterialTheme.typography.headlineMedium
         )
 
         // Precio
         Text(
-            text = "$ ${product.precio}",
+            text = "$ ${product.price}",
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.primary
         )
 
         // Descripción
         Text(
-            text = product.descripcion,
+            text = product.description,
             style = MaterialTheme.typography.bodyLarge
         )
 
