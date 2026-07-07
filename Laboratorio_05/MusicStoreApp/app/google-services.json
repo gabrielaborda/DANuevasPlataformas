@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "592392504803",
+    "project_id": "ecommerce-e4019",
+    "storage_bucket": "ecommerce-e4019.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592392504803:android:db88fd5293f7c49e1dccd6",
+        "android_client_info": {
+          "package_name": "com.example.musicstoreapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbR0kX-WEOsNsa9hHUFnDE97RYCpzbP0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

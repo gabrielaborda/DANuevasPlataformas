@@ -4,13 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope // 1. Importamos el scope para corrutinas
+import androidx.lifecycle.viewModelScope
 import com.example.musicstoreapp.ui.data.analytics.ProductVisitLogger
 import com.example.musicstoreapp.ui.data.model.Product
 import com.example.musicstoreapp.ui.data.repository.CartRepository
 import com.example.musicstoreapp.ui.data.repository.ProductRepository
 import com.example.musicstoreapp.ui.state.DetailUiState
-import kotlinx.coroutines.launch // 2. Importamos el constructor launch
+import kotlinx.coroutines.launch
 
 class DetailViewModel(
     private val repository: ProductRepository,
@@ -21,26 +21,30 @@ class DetailViewModel(
         private set
 
     fun loadProduct(productId: Int) {
-        // Abrimos la corrutina para poder llamar a getProducts()
         viewModelScope.launch {
-            try {
-                // Buscamos el producto en la lista que viene de internet
-                val product = repository
-                    .getProducts()
-                    .find { it.id == productId }
+            // Observamos el producto específico desde la base de datos (Fuente de verdad)
+            repository.getProductById(productId).collect { entity ->
+                // Mapeamos de ProductEntity (DB) a Product (UI)
+                val product = entity?.let {
+                    Product(
+                        id = it.id,
+                        title = it.title,
+                        price = it.price,
+                        description = it.description,
+                        image = it.image,
+                        category = it.category
+                    )
+                }
 
-                // Si lo encuentra, registra la visita en la analítica
+                // Registramos la visita si el producto existe
                 product?.let {
                     visitLogger.logVisit(it)
                 }
 
-                // Actualizamos la pantalla con el producto encontrado
+                // Actualizamos el estado para que la pantalla se redibuje
                 uiState = uiState.copy(
                     product = product
                 )
-            } catch (e: Exception) {
-                // Manejo de errores en caso de caída de red
-                e.printStackTrace()
             }
         }
     }

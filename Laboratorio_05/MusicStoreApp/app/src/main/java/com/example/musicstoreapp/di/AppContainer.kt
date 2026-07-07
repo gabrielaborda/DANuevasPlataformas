@@ -5,6 +5,7 @@ import com.example.musicstoreapp.ui.data.analytics.ProductVisitLogger
 import com.example.musicstoreapp.ui.data.analytics.ProductVisitLoggerImpl
 import com.example.musicstoreapp.ui.data.local.SessionManager
 import com.example.musicstoreapp.ui.data.local.SessionManagerImpl
+import com.example.musicstoreapp.ui.data.database.DatabaseProvider
 import com.example.musicstoreapp.ui.data.repository.ProductRepository
 import com.example.musicstoreapp.ui.data.repository.UserRepository
 
@@ -16,8 +17,13 @@ interface AppContainer {
 }
 
 class AppDataContainer(private val context: Context) : AppContainer {
+
+    private val database by lazy {
+        DatabaseProvider.getDatabase(context)
+    }
+
     override val productRepository: ProductRepository by lazy {
-        ProductRepository()
+        ProductRepository(database.productDao())
     }
 
     override val userRepository: UserRepository by lazy {
