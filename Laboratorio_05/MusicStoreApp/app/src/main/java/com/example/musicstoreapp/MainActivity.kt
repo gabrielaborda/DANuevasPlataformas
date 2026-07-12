@@ -16,23 +16,52 @@ import com.example.musicstoreapp.ui.data.database.DatabaseProvider
 import com.example.musicstoreapp.ui.navigation.AppNavigation
 import com.example.musicstoreapp.ui.theme.MusicStoreAppTheme
 import com.example.musicstoreapp.ui.viewmodel.ProductViewModel
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import com.example.musicstoreapp.ui.services.NotificationManager
 
 class MainActivity : ComponentActivity() {
 
+    // ==========================================
+    // Launcher para solicitar permiso de notificaciones
+    // ==========================================
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permiso concedido
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 1. Inicializamos la base de datos y el repositorio
+
+        // ==========================================
+        // Inicializar NotificationManager
+        // ==========================================
+        val notificationManager = NotificationManager(this)
+        notificationManager.createNotificationChannel()
+        askNotificationPermission()
+        notificationManager.getToken()
+
+        // ==========================================
+        // Base de datos
+        // ==========================================
         val database = DatabaseProvider.getDatabase(applicationContext)
         val repository = ProductRepository(database.productDao())
 
-        // 2. Definimos la Factory para el ViewModel
+        // ==========================================
+        // Factory del ViewModel
+        // ==========================================
         val viewModelFactory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(ProductViewModel::class.java)) {
                     @Suppress("UNCHECKED_CAST")
-
                     return ProductViewModel(repository) as T
-
                 }
                 throw IllegalArgumentException("Unknown ViewModel class")
             }
@@ -43,13 +72,35 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             MusicStoreAppTheme {
-                // 3. Obtenemos el ViewModel gestionado por el sistema usando la Factory
-                val viewModel: ProductViewModel = viewModel(factory = viewModelFactory)
 
-                Scaffold( modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val viewModel: ProductViewModel =
+                    viewModel(factory = viewModelFactory)
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
 
                     AppNavigation()
                 }
+            }
+        }
+    }
+
+    // ==========================================
+    // Solicitar permiso (Android 13+)
+    // ==========================================
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            if (
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
             }
         }
     }
