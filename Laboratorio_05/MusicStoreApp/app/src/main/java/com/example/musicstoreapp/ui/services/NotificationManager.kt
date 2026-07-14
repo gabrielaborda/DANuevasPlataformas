@@ -1,6 +1,7 @@
 package com.example.musicstoreapp.ui.services
 
 import android.app.NotificationChannel
+import android.app.NotificationManager as SystemNotificationManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -8,22 +9,23 @@ import com.google.firebase.messaging.FirebaseMessaging
 
 class NotificationManager(private val context: Context) {
     companion object {
-        const val CHANNEL_ID = "ecommerce_channel"
-        const val CHANNEL_NAME = "Ecommerce Notifications"
+        const val CHANNEL_ID = "music_store_alerts"
+        const val CHANNEL_NAME = "Music Store Alerts"
+        
+        // Tipos de Notificación
+        const val TYPE_NEW_PRODUCT = "NEW_PRODUCT"
+        const val TYPE_OFFER = "OFFER"
+        const val TYPE_ORDER_UPDATE = "ORDER_UPDATE"
     }
 
     fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Usamos la ruta completa para evitar conflicto con el nombre de esta clase
-            val importance = android.app.NotificationManager.IMPORTANCE_DEFAULT
+            val importance = SystemNotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
-                description = "Canal para notificaciones de la tienda"
+                description = "Notificaciones de productos, ofertas y pedidos"
             }
-            
-            val systemNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) 
-                    as android.app.NotificationManager
-            
-            systemNotificationManager.createNotificationChannel(channel)
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as SystemNotificationManager
+            notificationManager.createNotificationChannel(channel)
         }
     }
 

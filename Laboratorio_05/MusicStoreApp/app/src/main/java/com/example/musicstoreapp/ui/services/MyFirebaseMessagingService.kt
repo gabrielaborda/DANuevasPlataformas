@@ -22,20 +22,43 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         showNotification(message)
     }
     private fun showNotification(message: RemoteMessage) {
-        val title = message.notification?.title ?: "Nueva Notificación"
+        val data = message.data
+        val type = data["type"] ?: "DEFAULT"
+        
+        val title = message.notification?.title ?: "Music Store"
         val body = message.notification?.body ?: ""
+
+        // 1. Personalización de Icono y Prioridad según el contexto
+        val (icon, priority) = when (type) {
+            NotificationManager.TYPE_NEW_PRODUCT -> 
+                android.R.drawable.ic_input_add to NotificationCompat.PRIORITY_DEFAULT
+            NotificationManager.TYPE_OFFER -> 
+                android.R.drawable.btn_star_big_on to NotificationCompat.PRIORITY_HIGH
+            NotificationManager.TYPE_ORDER_UPDATE -> 
+                android.R.drawable.ic_popup_sync to NotificationCompat.PRIORITY_HIGH
+            else -> 
+                android.R.drawable.ic_dialog_info to NotificationCompat.PRIORITY_DEFAULT
+        }
+
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            // 2. Pasar el ID del producto o pedido para que la App sepa qué abrir
+            if (data.containsKey("id")) {
+                putExtra("target_id", data["id"])
+                putExtra("type", type)
+            }
         }
+
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
+
         val builder = NotificationCompat.Builder(this, NotificationManager.CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setSmallIcon(icon)
             .setContentTitle(title)
             .setContentText(body)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(priority)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
         try {

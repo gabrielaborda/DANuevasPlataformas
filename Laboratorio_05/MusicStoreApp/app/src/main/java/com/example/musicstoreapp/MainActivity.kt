@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -67,21 +68,24 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        // ==========================================
+        // Capturar datos de la notificación
+        // ==========================================
+        val targetId = intent.getStringExtra("target_id")
+        val type = intent.getStringExtra("type")
+
         enableEdgeToEdge()
 
         setContent {
-
             MusicStoreAppTheme {
-
                 val viewModel: ProductViewModel =
                     viewModel(factory = viewModelFactory)
 
-                Scaffold(
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
-
-                    AppNavigation()
-                }
+                // Pasamos los datos al Navigation para decidir a dónde ir
+                AppNavigation(
+                    notificationType = type,
+                    notificationId = targetId
+                )
             }
         }
     }
